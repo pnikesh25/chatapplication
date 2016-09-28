@@ -4,11 +4,13 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-
 var routes = require('./routes/index');
 var users = require('./routes/users');
+var mongoose = require('mongoose');
 
 var app = express();
+var server = require('http').createServer(app).listen(8081);
+var io = require('socket.io')(server);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -56,5 +58,12 @@ app.use(function(err, req, res, next) {
   });
 });
 
+//Database connection
+mongoose.connect('mongodb://localhost/test')
+var db = mongoose.connection;
+db.once('open', function(){
+  //Database connected!
+  console.log('Connected to Database');
+});
 
 module.exports = app;

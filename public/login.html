@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Login Page</title>
+    <link href="stylesheets/bootstrap.min.css" rel="stylesheet">
+  </head>
+  <body>
+    <div class="container-fluid">
+    	<div class="row">
+
+        <div class = "col-md-8">
+          <form role = "form" action = "/users/listusers" method = "POST">
+            <div class = "form-group">
+              <label for = "login_username">Username</label>
+              <input type = "text" class = "form-control" name = "login_username" id = "login_username" required/>
+            </div>
+            <div class = "form-group">
+              <label for = "login_password">Password</label>
+              <input type = "password" class = "form-control" name = "login_password" id = "login_password" required />
+            </div>
+            <button type = "submit" class = "btn btn-default">
+              Login
+            </button>
+          </form>
+        </div>
+        <hr>
+        <div class="col-md-8">
+          <form role="form" action = "/users/register" method = "POST">
+            <div class = "form-group">
+              <label for = "reg_username">Username</label>
+              <input type = "text" class = "form-control" name = "reg_username" id = "reg_username" required/>
+            </div>
+            <div class = "form-group">
+              <label for = "reg_password">Password</label>
+              <input type = "password" class = "form-control" name = "reg_password" id = "reg_password" required />
+            </div>
+            <div class = "form-group">
+              <label for = "reg_password">Confirm Password</label>
+              <input type = "password" class = "form-control" name = "reg_conpassword" id = "reg_conpassword" required />
+            </div>
+            <button type="submit" class="btn btn-default">
+              Register
+            </button>
+          </form>
+        </div>
+
+
+      </div>
+    </div>
+    <script src="javascripts/jquery.min.js"></script>
+    <script src="javascripts/bootstrap.min.js"></script>
+
+  </body>
+</html>

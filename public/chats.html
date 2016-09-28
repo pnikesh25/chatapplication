@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Chat Page</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"></link>
+
+</head>
+<body class="container">
+	<h1 align="center">Collaba Chats</h1>
+	<div class="onlineUsers" class="col-sm-4">
+		<h3>Online Users</h3>
+		<ul id='listOnline'>
+		</ul>
+	</div>
+	<div class="chatPage" class="col-sm-8">
+		<ul id='chatMessages'></ul>
+		<form action="/users/chats" method="post" style="position:fixed; bottom:5px;" >
+			<input type="text" name="msg" id='msg' placeholder="Type here" autofocus />
+			<button type="submit">Send</button>
+		</form>
+	</main>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+  	<script src="/javascripts/socket.io.js"></script>
+
+	<script>
+		var socket = io();
+		var user = location.search.split('?');
+		user = user[1].split('=')[1];
+		console.log('User : ' + user + ", " + socket.id + ' is online.');
+
+		socket.on('onlineUsers', function(err, users) {
+			if(err) console.log(err);
+			$('#listOnline').text('');
+			console.log(users);
+			for(i=0; i<users.length; ++i) {
+				var li = "<li id='" + users[i] + "' >" + users[i] + "</li>";
+				$('#listOnline').append(li);
+			}
+		});
+
+		$('form').submit(function() {
+			socket.emit('ChatMessage', $('#msg').val());
+			$('#msg').val('');
+		});
+	</script>
+</body>
+</html>
