@@ -6,6 +6,10 @@ var UserModel = require('../models/user');
 var path = require('path');
 var root = path.join(__dirname,'..','public');
 
+var jwt = require('jsonwebtoken');
+var mongoose = require('mongoose');
+var passport = require('passport');
+
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
@@ -15,7 +19,7 @@ router.get('/', function(req, res, next) {
 module.exports = router;
 
 /* GET users listing. */
-router.get('/login', function(req, res, next) {
+router.get('/login', passport.authenticate('jwt' , {session : false}),function(req, res, next) {
 	res.sendFile('login.html' , {root:root});
 });
 
@@ -30,16 +34,20 @@ router.post('/login', function(req, res, next){
     'password' : req.body.login_password
   };
 
-  UserModel.findOne(user, function(err, object){
+  UserModel.findOne(user, function(err, userObj){
     if(err)
       console.error();
 
-    if(user) {
-      user.online = true;
-      
+    if(userObj) {
+      var token = jwt.sign({username : user.username} , 'nikeshpatel');
+      token = 'JWT'+token;
+
+      userObj.online = true;
+      res.send(token);
     }
     else {
-      res.send("User doesn't exist");
+      console.log("User doesn't exist");
+      res.send('fail');
     }
   });
 });

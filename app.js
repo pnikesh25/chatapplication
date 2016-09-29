@@ -8,9 +8,15 @@ var routes = require('./routes/index');
 var users = require('./routes/users');
 var mongoose = require('mongoose');
 
+var User = require('./models/user');
+
 var app = express();
 var server = require('http').createServer(app).listen(8081);
 var io = require('socket.io')(server);
+
+var JwtStrategy = require('passport-jwt').Strategy;
+var ExtractJwt = require('passport-jwt').ExtractJwt;
+var passport = require('passport');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -65,5 +71,23 @@ db.once('open', function(){
   //Database connected!
   console.log('Connected to Database');
 });
+
+var opts = {}
+opts.jwtFromRequest = ExtractJwt.fromAuthHeader();
+opts.secretOrKey = 'nikeshpatel';
+
+passport.use(new JwtStrategy(opts, function(jwt_payload, done) {
+    User.findOne({username : jwt_payload.username}, function(err, user) {
+        if (err) {
+            return done(err, false);
+        }
+        if (user) {
+            done(null, user);
+        } else {
+            done(null, false);
+            // or you could create a new account
+        }
+    });
+}));
 
 module.exports = app;
