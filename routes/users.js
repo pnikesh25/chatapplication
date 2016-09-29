@@ -16,12 +16,12 @@ module.exports = router;
 
 /* GET users listing. */
 router.get('/login', function(req, res, next) {
-	res.render('login.html' , {root:root});
+	res.sendFile('login.html' , {root:root});
 });
 
 
 router.get('/register', function(req, res, next) {
-	res.render('login.html' , {root:root});
+	res.sendFile('login.html' , {root:root});
 });
 
 router.post('/login', function(req, res, next){
@@ -36,23 +36,11 @@ router.post('/login', function(req, res, next){
 
     if(user) {
       user.online = true;
-
-      UserModel.find({"online" : true}, function(err, users){
-        if(err)
-          console.error(err);
-
-        var onlineUsers = [];
-        console.log('Online Users : '+users);
-        for(i = 0; i < users.length ; i++)
-          onlineUsers.push(users[i].username);
-        console.log(onlineUsers);
-
-        res.redirect('/users/chats?userName=' + userName);
-
-      });
+      
     }
+    else {
       res.send("User doesn't exist");
-
+    }
   });
 });
 
@@ -68,7 +56,7 @@ router.post('/register', function(req, res, next) {
     res.send('The passwords do not Match');
   	//res.redirect('/users/register');
   }
-
+  else {
 
   UserModel.findOne({"username":userName}, function(err, user) {
   	if(err) {
@@ -93,10 +81,12 @@ router.post('/register', function(req, res, next) {
   	//console.log("Registration Successful. " + newUser);
   	}
   }
-  });
 
+  });
+}
 });
 
-router.post('listusers',function(req,res,next){
-  res.render('listuser.html' , {root:root});
+router.post('/listusers',function(req,res,next){
+
+  res.sendFile('listuser.html' , {root:root});
 });
